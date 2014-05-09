@@ -1,4 +1,4 @@
-/*jshint indent: 2 */
+/*jshint indent: 2, node: true*/
 /*global require, describe, it */
 'use strict';
 

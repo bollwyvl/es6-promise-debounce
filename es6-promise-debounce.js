@@ -1,5 +1,5 @@
 /*jshint indent:2 */
-/*global module, define */
+/*global setTimeout, clearTimeout, exports: true, module, define */
 (function(){
   'use strict';
 

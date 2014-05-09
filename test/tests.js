@@ -1,5 +1,5 @@
-/*jshint indent:2 */
-/*global require, describe, it */
+/*jshint indent: 2, node: true */
+/*global setTimeout, require, describe, it */
 'use strict';
 
 var _Promise = require('es6-promise').Promise,
