@@ -1,5 +1,5 @@
-/*jshint indent:2 */
-/*global describe, it */
+/*jshint indent: 2 */
+/*global require, describe, it */
 'use strict';
 
 var assert = require('assert'),

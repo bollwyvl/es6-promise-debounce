@@ -2,11 +2,19 @@
 ensure a Promise-returning function is not called until it hasn't been called
 for a certain amount of time.
 
+[![build badge][]][build status]
+
+[build status]: https://travis-ci.org/bollwyvl/es6-promise-debounce#
+[build badge]: https://travis-ci.org/bollwyvl/es6-promise-debounce.svg
+
 For implementations of the [ES6 Promise API](http://www.html5rocks.com/en/tutorials/es6/promises/#toc-api):
 - [`es6-promise`](https://github.com/jakearchibald/es6-promise)
 
-Inspired by [`_.debounce`](http://underscorejs.org/#debounce),
-[`Qdebounce`](https://github.com/gre/Qdebounce) an others.
+Inspired by
+- [`_.debounce`](http://underscorejs.org/#debounce)
+- [`Qdebounce`](https://github.com/gre/Qdebounce)
+
+and others.
 
 ## Usage
 See [tests](./tests).
