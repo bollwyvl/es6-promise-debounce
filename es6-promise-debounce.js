@@ -6,40 +6,59 @@
   // Establish the root object, `window` in the browser, or `exports` on the
   // server.
   var root = this;
-  
+
   function factory (Promise) {
-    function debounce(func, wait, immediate) {
-      var timeout, args, context, callNow, resolve, reject,
-        promise = new Promise (function(_resolve, _reject) {
+    /**
+     * Creates a debounced version of the given function. The new function
+     * will postpose the given function's execution until a certain wait
+     * period has expired. Once the function has been executed, it may
+     * be executed again but only after the wait period has expired again. This
+     * behavior is useful for implementing costly processes that need to wait
+     * for user input that may be changing frequently.
+     *
+     * Alternatively, the given function may be executed immediately (and
+     * then any subsequent call will be ignored unless the wait period has
+     * expired). This behavior is set by passing true for the "immediate"
+     * parameter and an example where it is useful is for preventing double
+     * clicks in order to prevent double submission of data on a user interface.
+     *
+     * This function will create a new Promise each time this function is
+     * called. Any existing promise is discarded; it was either already
+     * resolved because the bouncing wait period ended, or it will now never
+     * be resolved because a new call occurred during the wait period.
+     *
+     * @param fn the function to debounce.
+     * @param wait the wait period in milliseconds.
+     * @param [immediate] true to execute immediately (default: false).
+     *
+     * @return a Promise that resolves when "fn" is to be executed.
+     */
+    return function(fn, wait, immediate) {
+      var timer = null;
+      return function() {
+        var context = this;
+        var args = arguments;
+        var resolve;
+        var promise = new Promise(function(_resolve) {
           resolve = _resolve;
-          reject = _reject;
-        }),
-        complete = function(){
-          func.apply(context, args).then(resolve, reject);
-        };
-
-      return function(){
-        args = arguments;
-        context = this;
-
-        callNow = !!immediate && !timeout;
-
-        if(timeout){ clearTimeout(timeout); }
-
-        timeout = setTimeout(function(){
-          timeout = null;
-          if(!immediate){
-            complete();
+        }).then(function() {
+          return fn.apply(context, args);
+        });
+        if(!!immediate && !timer) {
+          resolve();
+        }
+        if(timer) {
+          clearTimeout(timer);
+        }
+        timer = setTimeout(function() {
+          timer = null;
+          if(!immediate) {
+            resolve();
           }
         }, wait);
-
-        if(callNow){ complete(); }
-
         return promise;
       };
-    }
-
-    return debounce;
+    };
   }
 
   // Export the debounce object for **Node.js**, with

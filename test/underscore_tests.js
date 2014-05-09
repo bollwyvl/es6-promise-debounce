@@ -10,7 +10,7 @@ var assert = require('assert'),
   debounce = require('../es6-promise-debounce')(_Promise);
 
 describe('the underscore.debounce test suite', function(){
-  it('debounce', function(done){
+  it('should debounce incrementing the counter', function(done){
     var counter = 0;
     var incr = function(){
       return new _Promise(function(resolve){ resolve(counter++); });
@@ -18,36 +18,37 @@ describe('the underscore.debounce test suite', function(){
     var debouncedIncr = debounce(incr, 32);
     debouncedIncr(); debouncedIncr();
     _.delay(debouncedIncr, 16);
-    _.delay(function(){ equal(counter, 1, 'incr was debounced'); done(); }, 96);
+    _.delay(function(){ equal(counter, 1, 'counter was incremented'); done(); }, 96);
   });
 
-  describe('debounce asap', function(){
+  describe('debounce by incrementing immediately then waiting', function(){
     var counter = 0;
     var incr = function(){
       return new _Promise(function(resolve){ resolve(counter++); });
     };
     var debouncedIncr = debounce(incr, 64, true);
 
-    it('first immediate call', function(done){
+    it('should increment counter with the first call', function(done){
       debouncedIncr()
-        .then(function(){ equal(counter, 1, 'incr was debounced'); done(); });
+        .then(function(){ equal(counter, 1, 'counter was incremented'); done(); });
     });
 
-    it('second immediate call', function(done){
+    it('should ignore the second call to increment', function(done){
       debouncedIncr()
-        .then(function(){ equal(counter, 1, 'incr was debounced'); done(); });
+        .then(function(){ equal(1, 2, 'this should never be called'); });
+      _.delay(function(){ equal(counter, 1, 'second increment was ignored'); done(); }, 128);
     });
 
-    it('debounce asap', function(done){
-      equal(counter, 1, 'incr was called immediately');
+    it('should increment only once', function(done){
+      counter = 0;
       _.delay(debouncedIncr, 16);
       _.delay(debouncedIncr, 32);
       _.delay(debouncedIncr, 48);
-      _.delay(function(){ equal(counter, 1, 'incr was debounced'); done(); }, 128);
+      _.delay(function(){ equal(counter, 1, 'counter was incremented once'); done(); }, 128);
     });
   });
 
-  it('debounce asap recursively', function(done) {
+  it('should debounce by incrementing immediately and recursively', function(done) {
     var counter = 0;
     var debouncedIncr = debounce(function(){
       return new _Promise(function(resolve){
@@ -59,11 +60,11 @@ describe('the underscore.debounce test suite', function(){
       });
     }, 32, true);
     debouncedIncr();
-    equal(counter, 1, 'incr was called immediately');
-    _.delay(function(){ equal(counter, 1, 'incr was debounced'); done(); }, 96);
+    _.delay(function(){ equal(counter, 1, 'counter was incremented immediately'); });
+    _.delay(function(){ equal(counter, 1, 'recursive increments were ignored'); done(); }, 96);
   });
 
-  it('debounce after system time is set backwards', function(done) {
+  it('should debounce after system time is set backwards', function(done) {
     var counter = 0;
     var origNowFunc = _.now;
     var debouncedIncr = debounce(function(){
@@ -71,7 +72,7 @@ describe('the underscore.debounce test suite', function(){
     }, 100, true);
 
     debouncedIncr();
-    equal(counter, 1, 'incr was called immediately');
+    _.delay(function(){ equal(counter, 1, 'counter was incremented immediately'); });
 
     _.now = function () {
       return new Date(2013, 0, 1, 1, 1, 1);
@@ -79,9 +80,11 @@ describe('the underscore.debounce test suite', function(){
 
     _.delay(function() {
       debouncedIncr();
-      equal(counter, 2, 'incr was debounced successfully');
-      done();
-      _.now = origNowFunc;
+      _.delay(function(){
+        equal(counter, 2, 'counter was incremented twice');
+        _.now = origNowFunc;
+        done();
+      });
     }, 200);
   });
 
