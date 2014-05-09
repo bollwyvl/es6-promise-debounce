@@ -1,0 +1,17 @@
+{
+  "framework": "mocha",
+  "serve_files": [ "test/_browserified.js" ],
+  "src_files": [
+    "*.js",
+    "test/*tests.js"
+  ],
+  "launchers": {
+    "Mocha": {
+      "command": "./node_modules/.bin/mocha test/*tests.js -R tap",
+      "protocol": "tap"
+    }
+  },
+  "before_tests": "./node_modules/.bin/browserify --debug test/*tests.js > test/_browserified.js",
+  "on_exit": "rm browserified.js",
+  "launch_in_dev": ["PhantomJS", "Mocha"]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "es6-promise-debounce",
+  "version": "0.0.1",
+  "description": "an ES6 debouncer",
+  "main": "es6-promise-debounce.js",
+  "scripts": {
+    "test": "./node_modules/jshint/bin/jshint *.js test/*tests.js && ./node_modules/mocha/bin/mocha test/*tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/bollwyvl/es6-promise-debounce"
+  },
+  "keywords": [
+    "promise",
+    "debounce",
+    "throttle",
+    "es6",
+    "es6-promise"
+  ],
+  "author": "Nicholas Bollweg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bollwyvl/es6-promise-debounce/issues"
+  },
+  "homepage": "https://github.com/bollwyvl/es6-promise-debounce",
+  "devDependencies": {
+    "browserify": "^3.46.0",
+    "es6-promise": "^1.0.0",
+    "jshint": "^2.5.0",
+    "mocha": "^1.18.2",
+    "testem": "^0.6.15",
+    "underscore": "^1.6.0"
+  }
+}
